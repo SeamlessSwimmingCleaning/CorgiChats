@@ -1,18 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('message-form');
+  const form = document.getElementById('chat-form');
   const input = document.getElementById('message-input');
-  const messagesList = document.getElementById('messages');
+  const messages = document.getElementById('messages');
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     const text = input.value.trim();
-    if (!text) return;
+    if (text === '') return;
 
     const li = document.createElement('li');
     li.textContent = text;
-    messagesList.appendChild(li);
+    messages.appendChild(li);
     input.value = '';
-
-    messagesList.scrollTop = messagesList.scrollHeight;
+    messages.scrollTop = messages.scrollHeight;
   });
 });
+
