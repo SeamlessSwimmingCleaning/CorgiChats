@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Private Messenger</title>
+  <title>Private Chat</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    #messages { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; }
-    input, button { margin-top: 10px; }
+    body { font-family: Arial; margin: 20px; }
+    #chat { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; margin-bottom: 10px; }
   </style>
 </head>
 <body>
   <h2>Private Chat</h2>
-  <div id="messages"></div>
-  <input type="text" id="message" placeholder="Type a message...">
+
+  <input id="myId" placeholder="gavinmd.cornelius@gmail.com" /><br><br>
+  <input id="recipientId" placeholder="trisanth.vu@gmail.com" /><br><br>
+
+  <div id="chat"></div>
+
+  <input id="message" placeholder="Type your message" />
   <button onclick="sendMessage()">Send</button>
 
   <script>
-    async function loadMessages() {
-      const res = await fetch('/messages');
-      const data = await res.json();
-      const msgDiv = document.getElementById('messages');
-      msgDiv.innerHTML = data.map(m => `<p><b>${m.sender}:</b> ${m.text}</p>`).join('');
-    }
+    const API_URL = 'https://seamlessswimmingcleaning/CorgiChats/'; 
 
     async function sendMessage() {
+      const sender = document.getElementById('myId').value;
+      const recipient = document.getElementById('recipientId').value;
       const message = document.getElementById('message').value;
-      await fetch('/send', {
+
+      await fetch(`${API_URL}/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sender: 'User1', text: message })
+        body: JSON.stringify({ sender, recipient, message })
       });
+
       document.getElementById('message').value = '';
       loadMessages();
     }
 
-    loadMessages();
-    setInterval(loadMessages, 3000); // poll every 3 seconds
-  </script>
-</body>
-</html>
+    async function loadMessages() {
+      const sender = document.getElementById('myId').value;
+      const recipient = document.getElementById('recipientId').value;
+
+      const res = await fetch(`${API_URL}/messages?user1=${sender}&user2=${recipient}`);
+      const data = await res.json();
+
+      const chat = document.getElementById('chat');
+      chat.innerHTML = data.map(msg =
+
